@@ -10,6 +10,9 @@ import pl.allegro.finance.tradukisto.internal.languages.english.EnglishValues;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanIntegerToWordsConverter;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanThousandToWordsConverter;
 import pl.allegro.finance.tradukisto.internal.languages.german.GermanValues;
+import pl.allegro.finance.tradukisto.internal.languages.italian.ItalianIntegerToWordsConverter;
+import pl.allegro.finance.tradukisto.internal.languages.italian.ItalianThousandToWordsConverter;
+import pl.allegro.finance.tradukisto.internal.languages.italian.ItalianValues;
 import pl.allegro.finance.tradukisto.internal.languages.kazakh.KazakhValues;
 import pl.allegro.finance.tradukisto.internal.languages.latvian.LatvianValues;
 import pl.allegro.finance.tradukisto.internal.languages.polish.PolishValues;
@@ -79,6 +82,22 @@ public final class Container {
         IntegerToStringConverter converter = new GermanIntegerToWordsConverter(
                 new IntegerToWordsConverter(germanThousandToWordsConverter, values.pluralForms()), values.exceptions(),
                 germanThousandToWordsConverter);
+
+        BigDecimalToStringConverter bigDecimalBankingMoneyValueConverter = new BigDecimalToBankingMoneyConverter(
+                converter, values.currency());
+
+        return new Container(converter, bigDecimalBankingMoneyValueConverter);
+    }
+
+    public static Container italianContainer() {
+        ItalianValues values = new ItalianValues();
+
+        ItalianThousandToWordsConverter italianThousandToWordsConverter = new ItalianThousandToWordsConverter(
+                values.baseNumbers());
+
+        IntegerToStringConverter converter = new ItalianIntegerToWordsConverter(
+                new IntegerToWordsConverter(italianThousandToWordsConverter, values.pluralForms()), values.exceptions(),
+                italianThousandToWordsConverter);
 
         BigDecimalToStringConverter bigDecimalBankingMoneyValueConverter = new BigDecimalToBankingMoneyConverter(
                 converter, values.currency());
